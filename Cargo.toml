@@ -1,0 +1,16 @@
+[package]
+name = "webthing"
+version = "0.1.0"
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sauron = "0.42"
+wtf = { path = "../namesarehard/wtf" }
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
