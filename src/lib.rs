@@ -39,8 +39,9 @@ impl Application<Msg> for App {
     fn view(&self) -> sauron::Node<Msg> {
         sauron::node! {
             <main>
+                <h1>"im supposed to be unstyled because tailwind"</h1>
                 <input type="button"
-                    value = "+"
+                    value = "plus"
                     key = "inc"
                     on_click=|_| {
                         Msg::Increment
