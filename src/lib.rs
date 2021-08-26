@@ -1,20 +1,49 @@
-use sauron::{Application, Cmd, Program, html::text, prelude::wasm_bindgen};
+use sauron::html::{text, ul};
+use sauron::web_sys::Event;
+use sauron::{node, InputEvent, Node};
+use sauron::{prelude::wasm_bindgen, Application, Cmd, Program};
 
 pub mod tailwind;
 
+pub mod example {
+    use macros::Entity;
+    use serde::Deserialize;
+    use serde::Serialize;
+
+    #[derive(Debug, Serialize, Deserialize, Entity)]
+    #[entity(id = 1)]
+    pub struct Person {
+        pub name: String,
+        //title: String,
+    }
+
+    impl Person {
+        pub fn new(name: String) -> Self {
+            Self { name }
+        }
+    }
+}
+
+use example::Person;
+
 #[derive(Debug)]
 pub enum Msg {
-    Increment,
-    Decrement,
+    None,
+    SetName(String),
+    NewPerson,
 }
 
 pub struct App {
-    count: i32,
+    name: String,
+    people: Vec<Person>,
 }
 
 impl App {
     pub fn new() -> Self {
-        App { count: 0 }
+        App {
+            name: "".to_string(),
+            people: vec![],
+        }
     }
 }
 
@@ -30,32 +59,44 @@ impl Application<Msg> for App {
         Self: Sized + 'static,
     {
         match msg {
-            Msg::Increment => self.count += 1,
-            Msg::Decrement => self.count -= 1,
+            Msg::NewPerson => {
+                let name = self.name.clone();
+                self.name = "".to_string();
+                self.people.push(Person::new(name));
+            }
+            Msg::SetName(s) => self.name = s,
+            Msg::None => {}
         }
         Cmd::none()
     }
 
     fn view(&self) -> sauron::Node<Msg> {
+        let items = self
+            .people
+            .iter()
+            .map(|p| node!(<li>{text(&p.name)}</li>))
+            .collect::<Vec<Node<Msg>>>();
         sauron::node! {
-            <main>
-                <h1>"im supposed to be unstyled because tailwind"</h1>
-                <input type="button"
-                    value = "plus"
-                    key = "inc"
-                    on_click=|_| {
-                        Msg::Increment
-                    }
-                />
-                <div class="count">{text(self.count)}</div>
-                <input type="button"
-                    value = "-"
-                    key = "dec"
-                    on_click = |_| {
-                        Msg::Decrement
-                    }
-                />
-            </main>
+          <main>
+            {ul(vec![], items)}
+            <div class="flex bg-gray-100">
+                <form on_submit=|e: Event| {
+                    e.prevent_default();
+                    Msg::NewPerson
+                }>
+                <input
+                    name="name"
+                    class="border"
+                    type="text"
+                    placeholder="Name"
+                    on_input=|v: InputEvent| {
+                        Msg::SetName(v.value)
+                    }>
+                </input>
+                <button class="bg-blue-100" type="submit">"Submit"</button>
+                </form>
+            </div>
+          </main>
         }
     }
 }

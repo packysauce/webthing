@@ -1,0 +1,19 @@
+
+[tasks.install-tailwindcss]
+condition = { files_not_exist = ["node_modules/.bin/tailwindcss"] }
+command = "npm"
+args = ["install", "-D", "tailwindcss@latest", "postcss@latest", "autoprefixer@latest"]
+
+[tasks.compile-css]
+command = "npx"
+args = ["tailwindcss", "-i", "src/static/styles.css", "-o", "target/static/styles.css"]
+dependencies = ["install-tailwindcss"]
+condition_script = ["test src/static/styles.css -nt target/static/styles.css"]
+
+[tasks.serve]
+command = "trunk"
+args = ["serve"]
+dependencies = ["compile-css"]
+
+[tasks.default]
+run_task = "serve"
