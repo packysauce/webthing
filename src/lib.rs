@@ -78,24 +78,25 @@ impl Application<Msg> for App {
             .collect::<Vec<Node<Msg>>>();
         sauron::node! {
           <main>
-            {ul(vec![], items)}
             <div class="flex bg-gray-100">
                 <form on_submit=|e: Event| {
                     e.prevent_default();
                     Msg::NewPerson
                 }>
                 <input
+                    autocomplete="off"
                     name="name"
-                    class="border"
+                    class="border rounded-sm p-1 m-1 focus:outline-none focus:ring-2"
                     type="text"
                     placeholder="Name"
                     on_input=|v: InputEvent| {
                         Msg::SetName(v.value)
                     }>
                 </input>
-                <button class="bg-blue-100" type="submit">"Submit"</button>
+                <button class="focus:outline-none p-1 rounded-md ring-1 bg-blue-100 pulse focus:ring-2 hover:ring-2" type="submit">"Submit"</button>
                 </form>
             </div>
+            {ul(vec![], items)}
           </main>
         }
     }
