@@ -1,5 +1,16 @@
 module.exports = {
-  purge: [],
+  mode: 'jit',
+  purge: {
+    content: [
+      'index.html',
+      'src/**/*.rs',
+    ],
+    options: {
+      safelist: [
+        /data-theme$/,
+      ]
+    }
+  },
   darkMode: 'media', // false or 'media' or 'class'
   theme: {
     extend: {},
@@ -7,5 +18,7 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('daisyui'),
+  ],
 }

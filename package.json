@@ -9,5 +9,9 @@
       "tailwindcss": {},
       "autoprefixer": {}
     }
+  },
+  "dependencies": {
+    "daisyui": "^1.14.0",
+    "theme-change": "^2.0.2"
   }
 }

@@ -8,7 +8,6 @@ args = ["install", "-D", "tailwindcss@latest", "postcss@latest", "autoprefixer@l
 command = "npx"
 args = ["tailwindcss", "-i", "src/static/styles.css", "-o", "target/static/styles.css"]
 dependencies = ["install-tailwindcss"]
-condition_script = ["test src/static/styles.css -nt target/static/styles.css"]
 
 [tasks.serve]
 command = "trunk"
@@ -17,3 +16,8 @@ dependencies = ["compile-css"]
 
 [tasks.default]
 run_task = "serve"
+
+# serve watch
+[tasks.sw]
+command = "cargo"
+args = ["watch", "--", "cargo", "make", "serve"]
